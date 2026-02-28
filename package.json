@@ -1,0 +1,14 @@
+{
+    "name": "placement-stats-root",
+    "version": "1.0.0",
+    "description": "Root configuration for placement stats project deployment",
+    "scripts": {
+        "start": "node backend/server.js",
+        "build:frontend": "cd frontend && npm install && npm run build",
+        "start:frontend": "cd frontend && npm start"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "private": true
+}

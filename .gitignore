@@ -1,0 +1,44 @@
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Node modules
+node_modules/
+
+# Build artifacts
+dist/
+build/
+.next/
+out/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Raw Placement Data (Keep safe from public repo)
+/chat data/media/
+/chat data/filtered.txt
+/chat data/grouped_messages.json
+/chat data/*.rtf
+/chat data/WhatsApp*
+
+# Ignore any raw Excel/PDFs outside media if accidentally placed
+*.xlsx
+*.xls
+*.pdf
+*.docx
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
