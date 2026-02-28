@@ -11,6 +11,11 @@ export const getSummaryStats = async () => {
     let highestCtc = 0;
     let totalCtcSum = 0;
     let ctcCount = 0;
+    let fullTimeCount = 0;
+    let internshipCount = 0;
+    let ppoCount = 0;
+    const allCtcs = [];
+    const packageDistribution = [];
 
     companies.forEach(company => {
         const stats = company.selection_stats || {};
@@ -20,20 +25,47 @@ export const getSummaryStats = async () => {
         const compensation = company.compensation || {};
         const ctc = compensation.ctc_lpa || 0;
 
-        if (ctc > highestCtc) highestCtc = ctc;
         if (ctc > 0) {
+            if (ctc > highestCtc) highestCtc = ctc;
             totalCtcSum += ctc;
             ctcCount++;
+            for (let i = 0; i < selCount; i++) {
+                allCtcs.push(ctc);
+                packageDistribution.push(ctc);
+            }
         }
+
+        const roles = company.roles || [];
+        const isFTE = roles.some(r => r.engagement_type.includes("Full Time") || r.engagement_type.includes("FTE"));
+        const isIntern = roles.some(r => r.engagement_type.includes("Internship") || r.engagement_type.includes("Intern"));
+        const isPPO = roles.some(r => r.engagement_type.includes("PPO"));
+
+        if (isFTE) fullTimeCount++;
+        if (isIntern) internshipCount++;
+        if (isPPO) ppoCount++;
     });
 
-    const averageCtc = ctcCount > 0 ? totalCtcSum / ctcCount : 0;
+    const averageCtc = ctcCount > 0 ? (totalCtcSum / ctcCount).toFixed(2) : 0;
+
+    allCtcs.sort((a, b) => a - b);
+    let medianCtc = 0;
+    if (allCtcs.length > 0) {
+        const mid = Math.floor(allCtcs.length / 2);
+        medianCtc = allCtcs.length % 2 !== 0 ? allCtcs[mid] : ((allCtcs[mid - 1] + allCtcs[mid]) / 2).toFixed(2);
+    }
 
     return {
         total_companies_visited: companies.length,
+        total_companies: companies.length,
         total_selections: totalSelections,
-        highest_ctc_lpa: highestCtc,
-        average_ctc_lpa: averageCtc
+        total_offers: totalSelections,
+        highest_package_lpa: highestCtc,
+        average_package_lpa: averageCtc,
+        median_package_lpa: medianCtc,
+        full_time_count: fullTimeCount,
+        internship_count: internshipCount,
+        ppo_count: ppoCount,
+        package_distribution: packageDistribution
     };
 };
 
