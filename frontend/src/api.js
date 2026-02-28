@@ -70,7 +70,7 @@ export const getSummaryStats = async () => {
 };
 
 export const getCompanies = async () => {
-    return data;
+    return data.companies;
 };
 
 export const getCompanyByName = async (name) => {
